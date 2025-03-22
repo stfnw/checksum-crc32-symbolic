@@ -2,8 +2,7 @@
 #
 # SPDX-License-Identifier: MIT
 
-import z3
-import binascii
+import z3  # type: ignore
 
 
 # Original code from Hacker's Delight.
@@ -71,7 +70,7 @@ def main() -> None:
         crc32z3 = hex(z3.simplify(crc32(msgval)).as_long())[2:]
 
         msghex = hex(msgval.as_long())[2:]
-        print("Message {} has crc32 of {}".format(msghex, crc32z3))
+        print(f"Message {msghex} has crc32 of {crc32z3}")
 
 
 if __name__ == "__main__":
