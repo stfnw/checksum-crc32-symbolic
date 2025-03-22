@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: MIT
 
 import z3
+import binascii
 
 
 # Original code from Hacker's Delight.
@@ -22,6 +23,15 @@ def crc32(msg: z3.BitVecRef) -> z3.BitVecRef:
             mask = -(crc & 1)
             crc = z3.LShR(crc, 1) ^ (polynomial & mask)
     return ~crc
+
+
+def isprintable(bv: z3.BitVecRef) -> z3.BoolRef:
+    conditions = []
+    for i in range(0, bv.size(), 8):
+        by = z3.Extract(i + 7, i, bv)
+        conditions.append(0x20 <= by)
+        conditions.append(by <= 0x7E)
+    return z3.And(conditions)
 
 
 def bitstringtobytes(bs: str) -> bytes:
@@ -46,7 +56,10 @@ def main() -> None:
     s = z3.Solver()
 
     # Find message whose checksum ends with a null byte.
-    s.add(z3.Extract(7, 0, crc32(msg)) == z3.BitVecVal(0, 8))
+    # s.add(z3.Extract(7, 0, crc32(msg)) == z3.BitVecVal(0, 8))
+
+    # Find printable message whose checksum is also printable.
+    s.add(z3.And(isprintable(msg), isprintable(crc32(msg))))
 
     if s.check() == z3.sat:
         print("SAT")
@@ -55,7 +68,12 @@ def main() -> None:
 
         crc32z3 = hex(z3.simplify(crc32(msgval)).as_long())[2:]
 
-        print("Message {} has crc32 of {}".format(hex(msgval.as_long())[2:], crc32z3))
+        msghex = hex(msgval.as_long())[2:]
+        print(
+            "Message {} ('{}') has crc32 of {}".format(
+                msghex, binascii.unhexlify(msghex).decode(), crc32z3
+            )
+        )
 
 
 if __name__ == "__main__":
