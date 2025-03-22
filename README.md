@@ -30,3 +30,4 @@ Message c137e36d5075 has crc32 of 66666666
 Message b0374baf4ea6 has crc32 of 77777777
 Message b01e45c2da76 has crc32 of 88888888
 Message a974046987a5 has crc32 of 99999999
+Message 596b2c1d0dc8 has crc32 of aaaaaaaa
