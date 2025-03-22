@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: MIT
 
 import z3  # type: ignore
+import binascii
 
 
 # Original code from Hacker's Delight.
@@ -58,7 +59,7 @@ def main() -> None:
     # s.add(z3.Extract(7, 0, crc32(msg)) == z3.BitVecVal(0, 8))
 
     # Find printable message whose checksum is also printable.
-    # s.add(z3.And(isprintable(msg), isprintable(crc32(msg))))
+    s.add(z3.And(isprintable(msg), isprintable(crc32(msg))))
 
     # Find specific checksum values.
     # s.add(crc32(msg) == z3.BitVecVal(0x11223344, 32))
@@ -78,16 +79,20 @@ def main() -> None:
     # s.add(crc32(msg) == z3.BitVecVal(0xCCCCCCCC, 32))
     # s.add(crc32(msg) == z3.BitVecVal(0xDDDDDDDD, 32))
     # s.add(crc32(msg) == z3.BitVecVal(0xEEEEEEEE, 32))
-    s.add(crc32(msg) == z3.BitVecVal(0xFFFFFFFF, 32))
+    # s.add(crc32(msg) == z3.BitVecVal(0xFFFFFFFF, 32))
 
-    if s.check() == z3.sat:
-        m = s.model()
-        msgval = m.evaluate(msg)
+    for _ in range(10):  # Get some examples
+        if s.check() == z3.sat:
+            m = s.model()
+            msgval = m.evaluate(msg)
 
-        msghex = "{:08x}".format(msgval.as_long())
-        crc32z3 = "{:08x}".format(z3.simplify(crc32(msgval)).as_long())
+            msghex = "{:08x}".format(msgval.as_long())
+            crc32z3 = "{:08x}".format(z3.simplify(crc32(msgval)).as_long())
 
-        print(f"Message {msghex} has crc32 of {crc32z3}")
+            print(
+                f"Message {msghex} (`{binascii.unhexlify(msghex).decode()}`) "
+                + f"has crc32 of {crc32z3} (`{binascii.unhexlify(crc32z3).decode()}`)"
+            )
 
 
 if __name__ == "__main__":
