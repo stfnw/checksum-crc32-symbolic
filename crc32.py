@@ -77,7 +77,8 @@ def main() -> None:
     # s.add(crc32(msg) == z3.BitVecVal(0xBBBBBBBB, 32))
     # s.add(crc32(msg) == z3.BitVecVal(0xCCCCCCCC, 32))
     # s.add(crc32(msg) == z3.BitVecVal(0xDDDDDDDD, 32))
-    s.add(crc32(msg) == z3.BitVecVal(0xEEEEEEEE, 32))
+    # s.add(crc32(msg) == z3.BitVecVal(0xEEEEEEEE, 32))
+    s.add(crc32(msg) == z3.BitVecVal(0xFFFFFFFF, 32))
 
     if s.check() == z3.sat:
         m = s.model()
