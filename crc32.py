@@ -59,21 +59,19 @@ def main() -> None:
     # s.add(z3.Extract(7, 0, crc32(msg)) == z3.BitVecVal(0, 8))
 
     # Find printable message whose checksum is also printable.
-    s.add(z3.And(isprintable(msg), isprintable(crc32(msg))))
+    # s.add(z3.And(isprintable(msg), isprintable(crc32(msg))))
 
-    for _ in range(10):  # Get some examples
-        if s.check() == z3.sat:
-            m = s.model()
-            msgval = m.evaluate(msg)
+    # Find specific checksum values.
+    s.add(crc32(msg) == z3.BitVecVal(0x11223344, 32))
 
-            crc32z3 = hex(z3.simplify(crc32(msgval)).as_long())[2:]
+    if s.check() == z3.sat:
+        m = s.model()
+        msgval = m.evaluate(msg)
 
-            msghex = hex(msgval.as_long())[2:]
-            print(
-                "Message {} ('{}') has crc32 of {}".format(
-                    msghex, binascii.unhexlify(msghex).decode(), crc32z3
-                )
-            )
+        crc32z3 = hex(z3.simplify(crc32(msgval)).as_long())[2:]
+
+        msghex = hex(msgval.as_long())[2:]
+        print("Message {} has crc32 of {}".format(msghex, crc32z3))
 
 
 if __name__ == "__main__":
