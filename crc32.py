@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2025 stfnw. Derived from CRC32 implementation of Hacker's Delight.
+#
+# SPDX-License-Identifier: MIT
+
 import z3
 
 
