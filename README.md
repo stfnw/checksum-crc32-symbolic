@@ -16,3 +16,6 @@ Message 512327207733 ('Q#' w3') has crc32 of 2a777065
 Message 474e2b625636 ('GN+bV6') has crc32 of 5b672565
 Message 2031795e334b (' 1y^3K') has crc32 of 4f5f2427
 Message 6b2c3139357c ('k,195|') has crc32 of 4f6f2245
+
+Specific checksum values:
+Message b14bc7ddba7d has crc32 of 11223344
