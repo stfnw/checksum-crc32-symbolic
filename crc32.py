@@ -10,7 +10,7 @@ import z3
 # https://web.archive.org/web/20160309224818/http://www.hackersdelight.org/permissions.htm
 
 
-def crc32(msg):
+def crc32(msg: z3.BitVecRef) -> z3.BitVecRef:
     assert msg.size() % 8 == 0
     crc = z3.BitVecVal(0xFFFFFFFF, 32)
     polynomial = z3.BitVecVal(0xEDB88320, 32)
@@ -24,21 +24,38 @@ def crc32(msg):
     return ~crc
 
 
-def bitstringtobytes(bs):
+def bitstringtobytes(bs: str) -> bytes:
     length = (len(bs) + 7) // 8
     return int(bs, 2).to_bytes(length, "big")
 
 
 # Wrapper around computing crc32 of a given constant byte message with z3.
-def crc32_(msg):
+def crc32_(msg: bytes) -> str:
     i = int.from_bytes(msg, byteorder="big")
     msg = z3.BitVecVal(i, len(msg) * 8)
     checksum = hex(z3.simplify(crc32(msg)).as_long())[2:]
     return checksum
 
 
-def main():
+def main() -> None:
     assert "4a17b156" == crc32_(b"Hello World")
+
+    size = 48
+    msg = z3.BitVec("msg", size)
+
+    s = z3.Solver()
+
+    # Find message whose checksum ends with a null byte.
+    s.add(z3.Extract(7, 0, crc32(msg)) == z3.BitVecVal(0, 8))
+
+    if s.check() == z3.sat:
+        print("SAT")
+        m = s.model()
+        msgval = m.evaluate(msg)
+
+        crc32z3 = hex(z3.simplify(crc32(msgval)).as_long())[2:]
+
+        print("Message {} has crc32 of {}".format(hex(msgval.as_long())[2:], crc32z3))
 
 
 if __name__ == "__main__":
