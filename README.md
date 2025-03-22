@@ -19,3 +19,4 @@ Message 6b2c3139357c ('k,195|') has crc32 of 4f6f2245
 
 Specific checksum values:
 Message b14bc7ddba7d has crc32 of 11223344
+Message 813d8f35a2c6 has crc32 of 44332211

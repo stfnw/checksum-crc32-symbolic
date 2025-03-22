@@ -61,7 +61,8 @@ def main() -> None:
     # s.add(z3.And(isprintable(msg), isprintable(crc32(msg))))
 
     # Find specific checksum values.
-    s.add(crc32(msg) == z3.BitVecVal(0x11223344, 32))
+    # s.add(crc32(msg) == z3.BitVecVal(0x11223344, 32))
+    s.add(crc32(msg) == z3.BitVecVal(0x44332211, 32))
 
     if s.check() == z3.sat:
         m = s.model()
