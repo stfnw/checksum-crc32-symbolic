@@ -61,19 +61,20 @@ def main() -> None:
     # Find printable message whose checksum is also printable.
     s.add(z3.And(isprintable(msg), isprintable(crc32(msg))))
 
-    if s.check() == z3.sat:
-        print("SAT")
-        m = s.model()
-        msgval = m.evaluate(msg)
+    for _ in range(10):  # Get some examples
+        if s.check() == z3.sat:
+            print("SAT")
+            m = s.model()
+            msgval = m.evaluate(msg)
 
-        crc32z3 = hex(z3.simplify(crc32(msgval)).as_long())[2:]
+            crc32z3 = hex(z3.simplify(crc32(msgval)).as_long())[2:]
 
-        msghex = hex(msgval.as_long())[2:]
-        print(
-            "Message {} ('{}') has crc32 of {}".format(
-                msghex, binascii.unhexlify(msghex).decode(), crc32z3
+            msghex = hex(msgval.as_long())[2:]
+            print(
+                "Message {} ('{}') has crc32 of {}".format(
+                    msghex, binascii.unhexlify(msghex).decode(), crc32z3
+                )
             )
-        )
 
 
 if __name__ == "__main__":
