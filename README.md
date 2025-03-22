@@ -9,7 +9,6 @@ Last byte is null:
 Printable message whose checksum is also printable:
 - Message 4d5532204258 (`MU2 BX`) has crc32 of 37677a21 (`7gz!`)
 - Message 4e2d5c76424b (`N-\vBK`) has crc32 of 4f27306d (`O'0m`)
-- Message 39735d702267 (`9s]p"g`) has crc32 of 3537602d (`57``-`)
 - Message 6a422749404b (`jB'I@K`) has crc32 of 69477063 (`iGpc`)
 - Message 362220267420 (`6" &t `) has crc32 of 342f3021 (`4/0!`)
 - Message 512327207733 (`Q#' w3`) has crc32 of 2a777065 (`*wpe`)
