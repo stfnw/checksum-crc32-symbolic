@@ -62,15 +62,16 @@ def main() -> None:
 
     # Find specific checksum values.
     # s.add(crc32(msg) == z3.BitVecVal(0x11223344, 32))
-    s.add(crc32(msg) == z3.BitVecVal(0x44332211, 32))
+    # s.add(crc32(msg) == z3.BitVecVal(0x44332211, 32))
+    s.add(crc32(msg) == z3.BitVecVal(0x00000000, 32))
 
     if s.check() == z3.sat:
         m = s.model()
         msgval = m.evaluate(msg)
 
-        crc32z3 = hex(z3.simplify(crc32(msgval)).as_long())[2:]
+        msghex = "{:08x}".format(msgval.as_long())
+        crc32z3 = "{:08x}".format(z3.simplify(crc32(msgval)).as_long())
 
-        msghex = hex(msgval.as_long())[2:]
         print(f"Message {msghex} has crc32 of {crc32z3}")
 
 
