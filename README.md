@@ -3,4 +3,4 @@ This allows formulating constraints on the inputs and outputs.
 
 # Example input/output pairs
 
-TODO
+Message 759103b3a0c5 has crc32 of 96ef5600 (last byte is null).
