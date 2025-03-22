@@ -63,7 +63,6 @@ def main() -> None:
 
     for _ in range(10):  # Get some examples
         if s.check() == z3.sat:
-            print("SAT")
             m = s.model()
             msgval = m.evaluate(msg)
 
